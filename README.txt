@@ -1,5 +1,18 @@
 # python3-wget
 
+Installation
+============
+
+With pip
+========
+
+    sudo pip3 install python3-wget
+
+From source
+===========
+
+    python3 setup.py install
+
 Usage
 =====
 

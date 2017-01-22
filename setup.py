@@ -17,7 +17,7 @@ setup(
     version=get_version('wget.py'),
     author='anatoly techtonik <techtonik@gmail.com> | Jamie Lindsey AKA JamieJackHerer',
     author_email='<jackherer026@gmail.com>',
-    url='https:github.com/jamiejackherer/python3-wget/',
+    url='https://github.com/jamiejackherer/python3-wget/',
 
     description="pure python 3.x download utility",
     license="Public Domain",
