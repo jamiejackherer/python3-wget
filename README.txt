@@ -21,6 +21,11 @@ Usage
   options:
     -o --output FILE|DIR   output filename or directory
 
+Use within a project/package
+============================
+
+    See my download repo on github that utilses this module
+    https://github.com/jamiejackherer/download
 
 API Usage
 =========
