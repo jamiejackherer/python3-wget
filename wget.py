@@ -300,7 +300,7 @@ def download(url, out=None, bar=bar_adaptive):
     names["url"] = filename_from_url(url)
     # get filename for temp file in current directory
     prefix = (names["url"] or names["out"] or ".") + "."
-    (fd, tmpfile) = tempfile.mkstemp(".tmp", prefix=prefix, dir=".")
+    (fd, tmpfile) = tempfile.mkstemp(".tmp", prefix=prefix)
     os.close(fd)
     os.unlink(tmpfile)
 
