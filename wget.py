@@ -286,7 +286,7 @@ class ThrowOnErrorOpener(urllib.request.FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
         raise Exception("{0}: {1}".format(errcode, errmsg))
 
-def download(url, out=None, bar=bar_adaptive):
+def download(url, out=None, bar=bar_adaptive, size=-1):
     """High level function, which downloads URL into tmp file in current
     directory and then renames it to filename autodetected from either URL
     or HTTP headers.
@@ -307,7 +307,7 @@ def download(url, out=None, bar=bar_adaptive):
     # set progress monitoring callback
     def callback_charged(blocks, block_size, total_size):
         # 'closure' to set bar drawing function in callback
-        callback_progress(blocks, block_size, total_size, bar_function=bar)
+        callback_progress(blocks, block_size, max(total_size, size), bar_function=bar)
     if bar:
         callback = callback_charged
     else:
