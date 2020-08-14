@@ -20,20 +20,17 @@ Current development;
 Contibution by Jamie Lindsey AKA JamieJackHerer <jackherer026@gmail.com>
 """
 
-
 import sys, shutil, os
 import tempfile
 import math
 
-
 import urllib.request
 import urllib.parse
-
 
 from hurry.filesize import size
 
 # Due to re-release specifically for python 3.x I have started versions from scratch
-__version__ = "0.0.2-beta1"
+__version__ = "0.0.3-beta1"
 
 
 def filename_from_url(url):
@@ -77,7 +74,7 @@ def filename_fix_existing(filename):
     return filename that doesn't exist already.
     """
     dirname = '.'
-    name, ext = filename.rsplit('.', 1)
+    name, ext = os.path.splitext(filename)
     names = [x for x in os.listdir(dirname) if x.startswith(name)]
     names = [x.rsplit('.', 1)[0] for x in names]
     suffixes = [x.replace(name, '') for x in names]
@@ -89,7 +86,7 @@ def filename_fix_existing(filename):
     idx = 1
     if indexes:
         idx += sorted(indexes)[-1]
-    return '{0} {1}.{2}'.format(name, idx, ext)
+    return '{0} {1}{2}'.format(name, idx, ext)
 
 
 # --- terminal/console output helpers ---
@@ -286,7 +283,7 @@ class ThrowOnErrorOpener(urllib.request.FancyURLopener):
     def http_error_default(self, url, fp, errcode, errmsg, headers):
         raise Exception("{0}: {1}".format(errcode, errmsg))
 
-def download(url, out=None, bar=bar_adaptive):
+def download(url, out=None, bar=bar_adaptive, size=-1, headers={}):
     """High level function, which downloads URL into tmp file in current
     directory and then renames it to filename autodetected from either URL
     or HTTP headers.
@@ -307,13 +304,18 @@ def download(url, out=None, bar=bar_adaptive):
     # set progress monitoring callback
     def callback_charged(blocks, block_size, total_size):
         # 'closure' to set bar drawing function in callback
-        callback_progress(blocks, block_size, total_size, bar_function=bar)
+        callback_progress(blocks, block_size, max(total_size, size), bar_function=bar)
     if bar:
         callback = callback_charged
     else:
         callback = None
+    
+    opener = ThrowOnErrorOpener()
+    for h in headers:
+        opener.addheader(h, headers[h])
+         
+    (tmpfile, headers) = opener.retrieve(url, tmpfile, callback)
 
-    (tmpfile, headers) = ThrowOnErrorOpener().retrieve(url, tmpfile, callback)
     names["header"] = filename_from_headers(headers)
     if os.path.isdir(names["out"]):
         filename = names["header"] or names["url"]
