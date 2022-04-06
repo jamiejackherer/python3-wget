@@ -317,7 +317,7 @@ def download(url, out=None, bar=bar_adaptive):
     names["header"] = filename_from_headers(headers)
     if os.path.isdir(names["out"]):
         filename = names["header"] or names["url"]
-        filename = names["out"] + "/" + filename
+        filename = os.path.join(names["out"], filename)
     else:
         filename = names["out"] or names["header"] or names["url"]
     # add numeric ' (x)' suffix if filename already exists
